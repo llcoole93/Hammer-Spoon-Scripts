@@ -16,7 +16,7 @@ local second_monitor = "DELL P2217H"
 -- CONFIGURATIONS
 --------------------------------------------------------------------------------
 hs.window.animationDuration = 0
-
+hs.application.enableSpotlightForNameSearches(true)
 --------------------------------------------------------------------------------
 -- LAYOUTS
 -- SINTAX:
@@ -252,12 +252,13 @@ local closeAll = {
     "Genymotion"
 }
 
-local openAll = {
-    "iTunes",
-    "Skype",
-    "Messages",
-    "Last.fm",
-    "Dash"
+local openAllGeneral = {
+    "Microsoft Teams",
+    "Microsoft Outlook",
+    "Microsoft OneNote",
+    "IntelliJ IDEA CE",
+    "Firefox",
+    "Slack"
 }
 
 newWindowWatcher = {
@@ -356,29 +357,12 @@ function config()
         --
     end)
 
-    hs.hotkey.bind(cmd_alt_ctrl, "P", function()
-        hs.alert.show("Closing")
-        for i,v in ipairs(closeAll) do
-            local app = hs.application(v)
-            if (app) then
-                if (app.name) then
-                    hs.alert.show(app:name())
-                end
-                if (app.kill) then
-                    app:kill()
-                end
-            end
+    hs.hotkey.bind(cmd_alt_ctrl, "=", function()
+        hs.alert.show("Opening General Applications")
+        for i,v in ipairs(openAllGeneral) do
+            local app = hs.application.open(v)
         end
     end)
-
-    function openAppWithHotKeyAndKeyBind(hotkey, keyBind, app, win)
-        hs.hotkey.bind(hotkey, keyBind, function()
-            hs.alert.show("Opening " .. app)
-            hs.application.open(app)
-            win:maximize()
-        end)
-    end
-
 
     --hs.hotkey.bind(cmd_alt_ctrl, "T", function()
     --    hs.alert.show("Opening")
@@ -398,6 +382,18 @@ function config()
         end
     end)
 end
+
+function openAppWithHotKeyAndKeyBind(hotkey, keyBind, app)
+    hs.hotkey.bind(hotkey, keyBind, function()
+        hs.alert.show("Opening " .. app)
+        hs.application.open(app)
+    end)
+end
+
+hs.hotkey.bind(cmd_alt_ctrl, "L", function()
+    hs.caffeinate.lockScreen()
+end)
+
 --------------------------------------------------------------------------------
 -- END CONFIGURATIONS
 --------------------------------------------------------------------------------
@@ -407,12 +403,17 @@ end
 
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "M", "Microsoft Teams")
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "P", "Postman")
-openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "I", "IntelliJ IDEA CE")
+openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, ",", "IntelliJ IDEA")
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "O", "Microsoft Outlook")
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "C", "Firefox")
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "N", "Microsoft OneNote")
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "T", "iTerm")
 openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "F", "Finder")
+openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "S", "Slack")
+openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, ".", "Android Studio")
+openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "/", "Simulator")
+openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "J", "Appium Inspector")
+openAppWithHotKeyAndKeyBind(cmd_alt_ctrl, "X", "Microsoft Excel")
 
 --------------------------------------------------------------------------------
 -- END BEGIN APP LAUNCH CONFIGURATIONS
